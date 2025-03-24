@@ -1,0 +1,47 @@
+package com.controller.data;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+
+import com.model.data.Task;
+import com.model.data.TaskRepository;
+
+//@WebServlet("/TaskController")
+public class TaskController extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    private TaskRepository taskRepo = new TaskRepository();
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        if ("delete".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            taskRepo.deleteTask(id);
+        }
+
+        // Retrieve updated task list and forward to JSP
+        List<Task> tasks = taskRepo.getAllTasks();
+        request.setAttribute("taskList", tasks);
+        request.getRequestDispatcher("taskList.jsp").forward(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        if ("add".equals(action)) {
+            String description = request.getParameter("description");
+            String status = request.getParameter("status");
+
+            taskRepo.addTask(description, status);
+        }
+
+        response.sendRedirect("TaskController");
+    }
+}

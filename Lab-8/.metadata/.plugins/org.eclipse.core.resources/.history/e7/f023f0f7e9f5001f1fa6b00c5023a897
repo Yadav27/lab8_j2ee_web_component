@@ -1,0 +1,56 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://xmlns.jcp.org/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task List</title>
+    <style>
+        table { width: 50%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h2>To-Do List</h2>
+    
+    <!-- Add Task Form -->
+    <form action="TaskController" method="post">
+        <input type="hidden" name="action" value="add">
+        <label>Description: <input type="text" name="description" required></label>
+        <label>Status: 
+            <select name="status">
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </label>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <h3>Task List</h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        
+        <!-- Using JSTL to iterate through tasks -->
+        <c:forEach var="task" items="${tasks}">
+            <tr>
+                <td>${task.id}</td>
+                <td>${task.description}</td>
+                <td>${task.status}</td>
+                <td>
+                    <form action="TaskController" method="post" style="display:inline;">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="id" value="${task.id}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+</body>
+</html>

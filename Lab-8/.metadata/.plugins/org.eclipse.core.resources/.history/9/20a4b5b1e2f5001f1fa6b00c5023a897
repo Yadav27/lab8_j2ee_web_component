@@ -1,0 +1,25 @@
+package com.model.data;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class TaskRepository {
+    private List<Task> tasks = new ArrayList<>();
+    private int taskIdCounter = 1; // Auto-increment ID
+
+    // Add a new task
+    public void addTask(String description, String status) {
+        tasks.add(new Task(taskIdCounter++, description, status));
+    }
+
+    // Retrieve all tasks
+    public List<Task> getAllTasks() {
+        return tasks;
+    }
+
+    // Delete task by ID
+    public void deleteTask(int id) {
+        tasks.removeIf(task -> task.getId() == id);
+    }
+}
+
